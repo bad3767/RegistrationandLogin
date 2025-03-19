@@ -31,7 +31,7 @@ namespace StockManagement.Controllers
             return Ok(new { Token = token });
         }
         [HttpGet("get-user")]
-        // [Authorize] // Requires authentication
+        // [Authorize] 
         public async Task<IActionResult> GetUser()
         {
             try
@@ -44,6 +44,7 @@ namespace StockManagement.Controllers
                 Console.WriteLine($"Token received: {token}");
 
                 var email = _authService.DecodeToken(token);
+                Console.WriteLine($"email : {email}");
                 if (email == null)
                     return Unauthorized("Invalid token.");
 
@@ -51,7 +52,6 @@ namespace StockManagement.Controllers
                 if (user == null)
                     return NotFound("User not found.");
 
-                // Prepare response
                 var userResponse = new UserResponse
                 {
                     Id = user.Id,
@@ -60,7 +60,6 @@ namespace StockManagement.Controllers
                     Role = user.Role
                 };
 
-                // Set Authorization in Response Headers
                 Response.Headers["Authorization"] = $"Bearer {token}";
 
                 return Ok(userResponse);

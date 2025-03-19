@@ -51,6 +51,7 @@ namespace StockManagement.Services
         public async Task<UserResponse> GetUserByEmail(string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            Console.WriteLine ($"user details : {user}");
             if (user == null) return null;
 
             return new UserResponse
@@ -65,35 +66,34 @@ namespace StockManagement.Services
 
 
         private string GenerateJwtToken(User user)
-{
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
-    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    var claims = new[]
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),  // Store User ID
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),        // ✅ Store Email
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
         new Claim(ClaimTypes.Name, user.Username),
         new Claim(ClaimTypes.Role, user.Role)
     };
 
-    var token = new JwtSecurityToken(
-        _config["JwtSettings:Issuer"], 
-        _config["JwtSettings:Issuer"], 
-        claims, 
-        expires: DateTime.UtcNow.AddHours(3), 
-        signingCredentials: creds
-    );
+            var token = new JwtSecurityToken(
+                _config["JwtSettings:Issuer"],
+                _config["JwtSettings:Issuer"],
+                claims,
+                expires: DateTime.UtcNow.AddHours(3),
+                signingCredentials: creds
+            );
 
-    return new JwtSecurityTokenHandler().WriteToken(token);
-}
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
 
 
         // Decode JWT Token and extract email
         public string DecodeToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_config["JwtSettings:Key"]); // FIXED: Use _config["Jwt:Key"]
-            Console.WriteLine("key: ", key);
+            var key = Encoding.ASCII.GetBytes(_config["JwtSettings:Key"]); 
 
             try
             {

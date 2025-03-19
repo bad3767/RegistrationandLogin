@@ -118,3 +118,4 @@
 /home/magesh/Magesh/new/dot/Login/obj/Debug/net8.0/Login.pdb
 /home/magesh/Magesh/new/dot/Login/obj/Debug/net8.0/Login.genruntimeconfig.cache
 /home/magesh/Magesh/new/dot/Login/obj/Debug/net8.0/ref/Login.dll
+/home/magesh/Magesh/new/dot/Login/obj/Debug/net8.0/Login.sourcelink.json
