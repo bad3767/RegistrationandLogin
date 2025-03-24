@@ -31,7 +31,6 @@ namespace StockManagement.Controllers
             return Ok(new { Token = token });
         }
         [HttpGet("get-user")]
-        // [Authorize] 
         public async Task<IActionResult> GetUser()
         {
             try
